@@ -1,6 +1,6 @@
 '''
 ./project1-sales-tax/sales_tax.py
-<https://github.com/lduran2/cis106-python-projects/blob/master/project1-sales-tax/salestax.py>
+<https://github.com/lduran2/cis106-python-projects/blob/master/project1-sales-tax/sales_tax.py>
 Calculates the total price including tax of a purchase.
 
 By     : Leomar Duran <https://github.com/lduran2>
@@ -15,18 +15,16 @@ Changelog:
 
 # start
 
-# The tax rate for the state, 5%
-STATE_TAX_RATE = 0.05
-
-# The tax rate for the county, 2.5%
-COUNTY_TAX_RATE = 0.025
+# Constants
+STATE_TAX_RATE  = 0.05  # The tax rate for the state, 5%.
+COUNTY_TAX_RATE = 0.025 # The tax rate for the county, 2.5%.
 
 # Variables
-subtotal_price = 0  # The total price before including tax.
-state_tax_abs = 0   # Sales tax for the state in dollars.
-county_tax_abs = 0  # Sales tax for the county in dollars.
-total_tax_abs = 0   # Sales tax total in dollars.
-total_price = 0     # The total price including tax.
+subtotal_price = 0.00   # The total price before including tax.
+state_tax_abs  = 0.00   # Sales tax for the state in dollars.
+county_tax_abs = 0.000  # Sales tax for the county in dollars.
+total_tax_abs  = 0.00   # Sales tax total in dollars.
+total_price    = 0.00   # The total price including tax.
 
 # Accept subtotal price.
 print('Please enter the amount of the purchase.')
