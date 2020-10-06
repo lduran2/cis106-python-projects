@@ -10,7 +10,7 @@ This file.
 ## project2.drawio
 Drawio source file for the flowchart.
 
-## project2.png
+## project2.pdf
 The flowchart image.
 
 ## days-of-week.py
