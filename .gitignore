@@ -1,5 +1,2 @@
 .ipynb_checkpoints/
-*.py
-!/project1-sales-tax/*.py
-!/project2-days-of-the-week/*.py
 *.zip

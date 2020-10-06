@@ -20,6 +20,10 @@ Drawio source file for the flowchart.
 ## project3.pdf
 The flowchart image.
 
+## bug-collector.ipynb
+Jupyter notebook of the program.  It is created first, then the
+program is extracted from it.
+
 ## bug-collector.py
 The Python program, calculates the running total of the bugs collected
 during a 5 day period.
