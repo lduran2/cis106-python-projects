@@ -22,3 +22,7 @@ A project demonstrating repetition structures, namely
           input, and
 * calculating a running total of the bugs collected during a 5 day
   period.
+
+# project4-sales-tax-ii
+A project demonstrating modularization by refactoring
+`../project1-sales-tax`.

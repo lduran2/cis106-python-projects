@@ -1,7 +1,7 @@
 # cis106-python-projects/project4-sales-tax-ii
 ### Leomar Durán
 
-A project demonstrating modularization and unit testing by refactoring
+A project demonstrating modularization by refactoring
 `../project1-sales-tax`.
 
 ## README.md
@@ -23,3 +23,6 @@ The hierarchy chart image.
 ## sales-tax-ii.py
 The python program, calculates the total price including tax of a
 purchase.
+
+## sales.py
+A python module dealing with calculating sales taxes.
