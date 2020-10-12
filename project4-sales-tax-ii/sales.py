@@ -38,7 +38,8 @@ def calc_receipt(subtotal_price):
     total_price    = 0.00   # The total price including tax.
 
     # Calculate the total absolute tax.
-    total_tax_abs, state_tax_abs, county_tax = calc_tax(subtotal_price)
+    total_tax_abs, state_tax_abs, county_tax_abs \
+            = calc_tax(subtotal_price)
     # Add total tax absolute to subtotal price giving total price.
     total_price = subtotal_price + total_tax_abs
 
