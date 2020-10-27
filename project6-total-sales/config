@@ -4,6 +4,7 @@ Total sales
 Asks for the sales for each day of the week and stores them in a list.
 Then calculates the total and displays it.
 > 
+Invalid option. Please try again.
 7
 Sunday
 Monday
@@ -14,9 +15,9 @@ Friday
 Saturday
 Action:
 3
-(D)
-(U)
-(T)
+D
+U
+T
 Display all sales.
 Update sales.
 Calculate the Total sales.

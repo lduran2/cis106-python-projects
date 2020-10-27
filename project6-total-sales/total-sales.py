@@ -4,14 +4,18 @@ Asks for the sales for each day of the week and stores them in a list.
 Then calculates the total and displays it.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-10-16t21:27
+When   : 2020-10-16t22:03
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.1
+Version: 1.2
 
 Changelog:
+    v1.2 - 2020-10-16t22:03
+        Implemented menu.
+
     v1.1 - 2020-10-16t21:27
         Read all constants.
+
     v1.0 - 2020-10-16t20:25
         Introduced the program.
 '''
@@ -20,6 +24,7 @@ Changelog:
 CONFIG_FILENAME = './config'    # name of configuration file
 INTRO = None                    # the introduction to this program
 PROMPT = ''                     # prompt for user input
+INVALID_OPTION = ''             # message for invalid option
 N_WEEK_DAYS = 0                 # number of days of the week
 WEEK_DAYS = None                # the days of the week
 N_ACTIONS = 0                   # the number of actions in main menu
@@ -45,9 +50,39 @@ def main():
     # Display the introduction.
     intro_total_sales()
 
+    # Read an action
+    option_menu(N_ACTIONS, ACTION_LEGEND, ACTION_OPTIONS, ACTION_LABELS, ACTION_PROMPT)
+
     # Program is done.
     print(DONE_STRING)
 # end def main()
+
+def option_menu(length, legend, options, labels, prompt_message):
+    choice = ''     # the option the user chose
+
+    # poll user input
+    while (True):
+        # print the legend and options
+        print(legend, end='')
+        for k in range(length):
+            print('\t(', options[k], ')\t', labels[k], sep='')
+        # end for k
+
+        # accept the choice
+        print(prompt_message, end='')
+        choice = input(PROMPT)
+
+        # if empty, stop the menu loop
+        if (choice == ''):
+            return
+        # end if (choice == '')
+
+        # if invalid choice, ask again
+        while (choice not in options):
+            print(INVALID_OPTION)
+            choice = input(PROMPT)
+        # end while (choice not in options)
+    # end while (True)
 
 def intro_total_sales():
     '''
@@ -67,6 +102,7 @@ def config_total_sales():
     # Global constants
     global INTRO
     global PROMPT
+    global INVALID_OPTION
     global N_WEEK_DAYS
     global WEEK_DAYS
     global N_ACTIONS
@@ -109,7 +145,10 @@ def config_total_sales():
     index += n_intro_lines
 
     # Find the prompt string.
-    PROMPT = config_lines[index]
+    PROMPT = config_lines[index].rstrip('\n')
+    index += 1
+    # Find the invalid option message.
+    INVALID_OPTION = config_lines[index]
     index += 1
 
     # Find the number of days for the week.
@@ -128,10 +167,13 @@ def config_total_sales():
     index += 1
     # Find action options.
     unsafe_action_options = config_lines[index:(index + N_ACTIONS)]
-    ACTION_OPTIONS = tuple(unsafe_action_options)
+    rstrip_n_in(N_ACTIONS, unsafe_action_options)   # strip newlines
+    ACTION_OPTIONS = tuple(unsafe_action_options)   # make a safe tuple copy
     index += N_ACTIONS
     # Find action labels.
-    unsafe_action_labels = config_lines[index:(index + N_ACTIONS)]
+    unsafe_action_labels = \
+        config_lines[index:(index + N_ACTIONS)]     # make a safe tuple copy
+    rstrip_n_in(N_ACTIONS, unsafe_action_labels)    # strip newlines
     ACTION_LABELS = tuple(unsafe_action_labels)
     index += N_ACTIONS
     # Find action prompt.
@@ -163,5 +205,10 @@ def config_total_sales():
     DONE_STRING = config_lines[index]
     index += 1
 # end def config_total_sales()
+
+def rstrip_n_in(length, a_list):
+    for k in range(length):
+        a_list[k] = a_list[k].rstrip('\n')
+# def trim_in(a_list)
 
 main()
