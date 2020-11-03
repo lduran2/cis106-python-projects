@@ -5,7 +5,15 @@ Asks for the sales for each day of the week and stores them in a list.
 Then calculates the total and displays it.
 > 
 Invalid option. Please try again.
+Sales by day of the week:
 7
+U
+M
+T
+W
+R
+F
+S
 Sunday
 Monday
 Tuesday
@@ -13,6 +21,7 @@ Wednesday
 Thursday
 Friday
 Saturday
+Please choose a day of the week to start updating. [default BACK]
 Action:
 3
 D
@@ -22,10 +31,8 @@ Display all sales.
 Update sales.
 Calculate the Total sales.
 Please choose an action. [default STOP]
-Sales by day of the week:
-Please choose a day of the week to start updating. [default BACK]
 Enter the sales for 
-.
+. [default STOP]
 The total sales is 
 .
 Done.

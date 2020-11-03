@@ -26,3 +26,16 @@ A project demonstrating repetition structures, namely
 # project4-sales-tax-ii
 A project demonstrating modularization by refactoring
 `../project1-sales-tax`.
+
+# project5-line-numbers
+A project demonstrating text file input and exceptions, by numbering
+the lines in a given text file.
+
+# project6-total-sales
+A project demonstrating lists by asking for the sales for each day of
+the week, storing them in a list, and calculating the total.
+
+# project7-initials
+A project demonstrating looping through a string, comparing characters
+and string concatenation by accepting a name and returning the first,
+(middle), and last initials.
