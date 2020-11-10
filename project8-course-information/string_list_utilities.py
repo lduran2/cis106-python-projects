@@ -8,9 +8,12 @@ By     : Leomar Duran <https://github.com/lduran2>
 When   : 2020-10-16t23:45
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.3
+Version: 1.4
 
 Changelog:
+    v1.4 - 2020-11-09t20:45
+        Abstracted ljust from total-sales.py
+
     v1.3 - 2020-10-16t23:45
         Abstracted from total-sales.py
 
@@ -101,3 +104,17 @@ def max_len(a_tuple):
     return the_max
 # end def max_len(a_tuple)
 
+def ljust(string, width):
+    '''
+    Right justifies the given string in the given column width.
+    '''
+    # return the string with enough spaces to make up the width
+    return (string + (' ' * (width - len(string))))
+# end def ljust(string, width)
+
+def false2(unused0, unused1):
+    '''
+    Returns False always, with two parameters
+    '''
+    return False
+# def def false2(unused0, unused1)

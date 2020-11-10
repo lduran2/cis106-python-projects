@@ -8,6 +8,9 @@ This file.
 Menu that accepts a course by course number and displays the
 information about the course.
 
+## ./tables.py
+Utility functions for tables.
+
 ## ./string_list_utilities.py
 Different utility functions that use strings (originally from
 `/project6-total-sales/` and used for `option_menu`).
