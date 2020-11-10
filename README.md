@@ -39,3 +39,8 @@ the week, storing them in a list, and calculating the total.
 A project demonstrating looping through a string, comparing characters
 and string concatenation by accepting a name and returning the first,
 (middle), and last initials.
+
+# project8-course-information
+Menu that accepts a course by course number and displays the
+information about the course using various functions of a dictionary,
+`len()`, `keys()`, keying.
