@@ -1,0 +1,44 @@
+\documentclass{standalone}
+% By    : Leomar Duran <https://github.com/lduran2>
+% When  : 2020-11-16t21:26
+% Where : Community College of Philadelphia
+% For   : CIS 106/Introduction to Programming
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{booktabs}
+\usepackage{minted}
+\renewcommand{\arraystretch}{1.3}
+
+\begin{document}
+
+\begin{tabular}{@{}l@{ }l@{}}
+\toprule
+    \multicolumn{2}{@{}c@{}}{\mintinline{python}{pet.Pet}}
+\\*
+\midrule
+    $-$ & \mintinline{python}{__name : str}
+\\*
+    $-$ & \mintinline{python}{__animal_type : str}
+\\*
+    $-$ & \mintinline{python}{__age : int}
+\\*
+\midrule
+    $-$ & \mintinline{python}{__init__(pet.Pet)}
+\\*
+    $+$ & \mintinline{python}{set_name(str)}
+\\*
+    $+$ & \mintinline{python}{set_animal_type(str)}
+\\*
+    $+$ & \mintinline{python}{set_age(int)}
+\\*
+    $+$ & \mintinline{python}{get_name() : str}
+\\*
+    $+$ & \mintinline{python}{get_animal_type() : str}
+\\*
+    $+$ & \mintinline{python}{get_age() : int}
+\\*
+\bottomrule
+\end{tabular}
+
+\end{document}
