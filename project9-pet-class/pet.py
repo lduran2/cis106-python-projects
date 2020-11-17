@@ -1,15 +1,18 @@
 '''
-./project9-pet-class/pet-class.py
+./project9-pet-class/pet.py
 Module that manages pets.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-11-09t21:02
+When   : 2020-11-16t23:51
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.0
+Version: 1.1
 
 Changelog:
-    v1.0 - 2020-11-09t17:04
+    v1.1 - 2020-11-16t23:51
+        Fixed the last letter being cut from animal_type.
+
+    v1.0 - 2020-11-16t22:13
         Implemented ./pet.py
 '''
 class Pet:
@@ -54,7 +57,7 @@ class Pet:
             # Get the first letter uppercase.
             self.__animal_type = animal_type[0].upper()
             # Get the rest letter lowercase.
-            self.__animal_type += animal_type[1:-1].lower()
+            self.__animal_type += animal_type[1:].lower()
         else:
             print('Error: `animal_type` is not a string.')
         # end if (isinstance(animal_type, str))
