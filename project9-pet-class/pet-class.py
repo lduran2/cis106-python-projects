@@ -4,18 +4,26 @@ A program that demonstrates classes and objects by instantiating and
 mutating an object, then accessing its properties.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-11-16t22:13
+When   : 2020-11-22t15:02
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.0
+Version: 1.1
 
 Changelog:
+    v1.1 - 2020-11-22t15:02
+        Reimplementing as menu-driven.
+        Used placeholder names and submenus.
+
     v1.0 - 2020-11-16t22:13
         Implemented ./pet-class.py
 '''
 
-# import the pet class
-import pet
+# libraries
+import pet                              # for the pet class
+import string_list_utilities as slew    # for option_menu_apply
+
+# number of pets to manage
+N_PETS = 10
 
 def main():
     '''
@@ -23,36 +31,39 @@ def main():
     '''
 
     # variables
-    name = ''           # name of the pet
-    animal_type = ''    # type of the pet
-    age = 0             # age of the pet
+    pets = [ None ] * N_PETS                    # list of pets
+    options = list(range(1, N_PETS)) + [ 0 ]    # list of options
+    callbacks = [ slew.false2 ] * N_PETS        # list of callback functions of pets
 
-    # Create the pet.
-    my_pet = pet.Pet()
+    # stringify the options
+    slew.stringify_in(N_PETS, options)
 
-    # Accept the name from the user.
-    print('Please enter the name of your pet.')
-    name = input('> ')
-    my_pet.set_name(name)
+    # populate the list with pets
+    for k in range(0, N_PETS):
+        pets[k] = pet.Pet()
+        # placeholder names while testing
+        pets[k].set_name(str(k))
+    # end for k
 
-    # Accept the animal type from the user.
-    print('Please enter the type of animal that your pet is.')
-    animal_type = input('> ')
-    my_pet.set_animal_type(animal_type)
-
-    # Accept the age from the user.
-    print('Please enter the age of your pet.')
-    age = int(input('> '))
-    my_pet.set_age(age)
-
-    # Display the result
-    print('Your pet\'s file:')
-    print('Name       :\t', my_pet.get_name())
-    print('Animal type:\t', my_pet.get_animal_type())
-    print('Age        :\t', my_pet.get_age())
+    # main option menu
+    slew.option_menu_apply(N_PETS, 'Pets:',\
+        options, get_pet_name, 'Choose a pet to manage. [default STOP]',\
+        callbacks, pets, '\n> ', 'Invalid pet chosen.'\
+    )
 
     # finish
     print('Done.')
 # end main()
 
+def get_pet_name(pets, index):
+    '''
+    Returns the name of `pets[index]`
+    @params
+        pets -- list of pets
+        index -- index of pet whose name to get
+    '''
+    return pets[index].get_name();
+# end def get_pet_name()
+
+# start
 main()
