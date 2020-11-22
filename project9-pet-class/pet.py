@@ -19,6 +19,9 @@ class Pet:
     '''
     Class for user's pets.
     '''
+
+    UNKNOWN_AGE = -1    # pet's name is not known
+
     def __init__(self):
         '''
         Creates a default pet.
@@ -27,7 +30,7 @@ class Pet:
         '''
         self.__name = ''         # name of the pet
         self.__animal_type = ''  # type of animal, e.g., Dog, Cat, Bird
-        self.__age = 0           # age of the pet
+        self.__age = -1          # age of the pet (-1 is unknown)
     # end def __init__(self)
 
     def set_name(self, name):

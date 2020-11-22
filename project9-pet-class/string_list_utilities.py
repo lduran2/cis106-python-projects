@@ -2,16 +2,23 @@
 ./project6-total-sales/string_list_utilities.py
 Different utility functions that use strings.
 
-option_menu, option_menu_apply, create_label_from_strings
+option_menu, option_menu_apply, create_legend,
+    create_label_from_strings
 stringify_in, rstrip_n_in, max_len, ljust, false2
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-11-22t14:57
+When   : 2020-11-22t18:17
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 2.1
+Version: 2.2
 
 Changelog:
+    v2.2 - 2020-11-22t18:17
+        Changed `option_menu_apply` to use parameters `legendfn`
+            function and `legend_end` to represent the legend instead
+            of `legend`.
+        Added `create_legend` for `option_menu`.
+
     v2.1 - 2020-11-22t14:57
         Implemented `stringify_in`, helpful for menu options.
 
@@ -55,11 +62,16 @@ def option_menu(\
         prompt -- the prompt character for input
         invalid_option -- error message when the user gives bad input
     '''
+    # prepare `legendfn` to return the legend
+    legendfn = create_legend(legend)
     # prepare `labelfn` to just index the labels list
     labelfn = create_label_from_strings(labels)
-    # call `option_menu_apply` using the giving parameters
-    # and `labelfn`
-    option_menu_apply(length, legend, options,\
+    # call `option_menu_apply` using the giving parameters,
+    # `legendfn`, empty legend_end and `labelfn`
+    option_menu_apply(length,\
+        legendfn,\
+        '',\
+        options,\
         labelfn,\
         prompt_message, callbacks, data, prompt, invalid_option\
     )
@@ -67,13 +79,14 @@ def option_menu(\
 #     length, legend, options, labels, prompt_message, callbacks, data)
 
 def option_menu_apply(\
-    length, legend, options, labelfn, prompt_message, callbacks, data,\
-    prompt, invalid_option):
+    length, legendfn, legend_end, options, labelfn, prompt_message,\
+    callbacks, data, prompt, invalid_option):
     '''
     Allows the user to pick one of the `options`, using label functions.
     @params
         length -- number of options
-        legend -- prior to options list
+        legendfn -- function to create legend prior to options list
+        legend_end -- terminates the legend prior to options list
         options -- the options the user can pick
         labelfn : (data, i_choice) = function for getting labels from the data
         prompt_message -- instruction for the user
@@ -89,7 +102,7 @@ def option_menu_apply(\
         i_choice = 0    # index of the user's choice
 
         # print the legend and options with labels
-        print(legend, end='')
+        print(legendfn(), end=legend_end)
         for k in range(length):
             print('\t(', options[k], ')\t', labelfn(data, k), sep='')
         # end for k
@@ -123,6 +136,18 @@ def option_menu_apply(\
 # end option_menu_apply(\
 #   length, legend, options, labelfn, prompt_message, callbacks, data,\
 #   prompt, invalid_option)
+
+def create_legend(legend):
+    '''
+    Create a function that returns the legend itself.
+    @param
+        legend -- legend to return from the function
+    @return a function that returns `legend`.
+    '''
+    def get_legend():
+        return legend
+    return get_legend
+# end def create_legend(legend)
 
 def create_label_from_strings(labels):
     '''
