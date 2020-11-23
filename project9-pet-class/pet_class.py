@@ -4,12 +4,15 @@ A program that demonstrates classes and objects by instantiating and
 mutating an object, then accessing its properties.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-11-22t18:44
+When   : 2020-11-22t21:10
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.3
+Version: 1.4
 
 Changelog:
+    v1.4 - 2020-11-22t21:10
+        Made a little more user friendly.
+
     v1.3 - 2020-11-22t18:44
         Renamed to ./pet_class.py for use in ./notebook.ipynb
 
@@ -110,8 +113,15 @@ def display_pet_type(a_pet, i_action):
     if (animal_type == ''):
         print(name, 'is no known type of animal.')
     else:
-        print(name, 'is a', (animal_type + '.'))
+        print(name, end='')
+        if (animal_type[0] in 'AEIOU'):
+            print(' is an ', end='')
+        else:
+            print('is a', end='')
+        # end if (animal_type[0] in 'AEIOU')
+        print(animal_type, '.', sep='')
     # end if (animal_type == '')
+    print()
     # continue pet menu
     return True
 # end def display_pet_type(a_pet, i_action)
@@ -131,6 +141,7 @@ def display_pet_age(a_pet, i_action):
     else:
         print(name, 'is', age, 'years old.')
     # end if (age == '')
+    print()
     # continue pet menu
     return True
 # end def display_pet_age(a_pet, i_action)
@@ -144,10 +155,12 @@ def change_pet_name(a_pet, i_action):
     '''
     name = a_pet.get_name() # name of the pet
     # ask for the new name
-    print('Please enter the new name of', (name + '.'))
+    print('What is the new name of', (name + '?'))
     new_name = input('> ')
     # set the new name
     a_pet.set_name(new_name)
+    print('Update:', name, 'renamed to', (a_pet.get_name() + '.'))
+    print()
     # continue pet menu
     return True
 # end def display_pet_type(a_pet, i_action)
@@ -161,15 +174,17 @@ def change_pet_type(a_pet, i_action):
     '''
     name = a_pet.get_name() # name of the pet
     # ask for the new type of animal
-    print('Please enter the new type of animal of', (name + '.'))
+    print('What type of animal is', (name + '?'))
     animal_type = input('> ')
     # set the new type of animal
     a_pet.set_animal_type(animal_type)
+    print('Update: ', end='')
+    display_pet_type(a_pet, i_action)
     # continue pet menu
     return True
 # end def display_pet_type(a_pet, i_action)
 
-def change_pet_age(a_pet, index):
+def change_pet_age(a_pet, i_action):
     '''
     Changes the age of the pet `a_pet`.
     @params
@@ -178,10 +193,22 @@ def change_pet_age(a_pet, index):
     '''
     name = a_pet.get_name() # name of the pet
     # ask for the new length of age
-    print('Please enter the new length of age of', (name + '.'))
-    age = int(input('> '))
-    # set the new length of age
-    a_pet.set_age(age)
+    print('How old is', (name + '?'))
+    # handle non-integer ages
+    try:
+        age = int(input('> '))
+        # set the new length of age
+        if (not(a_pet.set_age(age))):
+            # if no error, show the update
+            print('Update: ', end='')
+            display_pet_age(a_pet, i_action)
+        else:
+            print() # the error is already printed
+        # end if (not(a_pet.set_age(age))) else
+    except ValueError:
+        print('Error: `age` is not an integer.')
+        print()
+    # end except ValueError
     # continue pet menu
     return True
 # end def display_pet_age(a_pet, i_action)
