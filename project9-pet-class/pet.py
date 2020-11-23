@@ -3,12 +3,15 @@
 Module that manages pets.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-11-16t23:51
+When   : 2020-11-22t17:12
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.1
+Version: 1.2
 
 Changelog:
+    v1.2 - 2020-11-22t17:12
+        Started using -1 for age of the pet is unknown.
+
     v1.1 - 2020-11-16t23:51
         Fixed the last letter being cut from animal_type.
 

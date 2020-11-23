@@ -4,12 +4,15 @@ A program that demonstrates classes and objects by instantiating and
 mutating an object, then accessing its properties.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-11-22t18:18
+When   : 2020-11-22t18:44
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.2
+Version: 1.3
 
 Changelog:
+    v1.3 - 2020-11-22t18:44
+        Renamed to ./pet_class.py for use in ./notebook.ipynb
+
     v1.2 - 2020-11-22t18:18
         Finished ./pet-class.py and refactored `slew.option_menu`
             accordingly.
