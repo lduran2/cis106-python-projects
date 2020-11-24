@@ -41,13 +41,14 @@ def main():
     '''
 
     # variables
-    pets = [ None ] * N_PETS                    # list of pets
-    options = list(range(1, N_PETS)) + [ 0 ]    # list of options
-    callbacks = [ pet_menu ] * N_PETS           # list of callback
+    pets = ([ None ] * N_PETS)                  # list of pets
+    options = (list(range(1, N_PETS)) + [ 0 ])  # list of options
+    callbacks = (( pet_menu, ) * N_PETS)        # list of callback
                                                 #   functions of pets
 
     # stringify the options
     slew.stringify_in(N_PETS, options)
+    options = tuple(options)
 
     # populate the list with pets
     for k in range(0, N_PETS):
@@ -55,6 +56,7 @@ def main():
         # placeholder name before proper naming
         pets[k].set_name('Pet #' + str(k + 1))
     # end for k
+    pets = tuple(pets)
 
     # main option menu
     slew.option_menu_apply(N_PETS, slew.create_legend('Pets:'), '',\
@@ -70,13 +72,13 @@ def pet_menu(pets, index):
     a_pet = pets[index]
     # menu parameters
     legend = (get_pet_name(pets, index) + ':\n')
-    options = [ 'L', 'A', 'N', 'T', 'E' ]
-    labels = [ 'Display animal type.', 'Display age.',\
+    options = ( 'L', 'A', 'N', 'T', 'E' )
+    labels = ( 'Display animal type.', 'Display age.',\
         'Change name.', 'Change animal type.', 'Change age.'\
-    ]
-    callbacks = [ display_pet_type, display_pet_age,\
+    )
+    callbacks = ( display_pet_type, display_pet_age,\
         change_pet_name, change_pet_type, change_pet_age\
-    ]
+    )
     n_options = len(options)    # count number of options
 
     # the index here represents the action number, not pet number
@@ -117,7 +119,7 @@ def display_pet_type(a_pet, i_action):
         if (animal_type[0] in 'AEIOU'):
             print(' is an ', end='')
         else:
-            print('is a', end='')
+            print(' is a ', end='')
         # end if (animal_type[0] in 'AEIOU')
         print(animal_type, '.', sep='')
     # end if (animal_type == '')
