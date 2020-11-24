@@ -3,16 +3,20 @@
 Different utility functions that use strings.
 
 option_menu, option_menu_apply, create_legend,
-    create_label_from_strings
+    create_callable_from_callback,  create_label_from_strings
 stringify_in, rstrip_n_in, max_len, ljust, false2
 
 By     : Leomar Duran <https://github.com/lduran2>
 When   : 2020-11-22t18:17
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 2.2
+Version: 2.3
 
 Changelog:
+    v2.3 - 2020-11-23t18:17
+        Added `create_callable_from_callback` to create a label
+            callable from an option menu callback.
+
     v2.2 - 2020-11-22t18:17
         Changed `option_menu_apply` to use parameters `legendfn`
             function and `legend_end` to represent the legend instead
@@ -149,6 +153,23 @@ def create_legend(legend):
     return get_legend
 # end def create_legend(legend)
 
+def create_callable_from_callback(callbackfn, data, index):
+    '''
+    Creates a callable function from an option menu callback function.
+    This is for use as a legend callback function.
+    @param
+        callbackfn -- callback function to call
+        data -- data managed by the option menu
+        index -- index of element for the data
+    @return the callable function returning the value of `callbackfn(data, index)`.
+    '''
+    def callback():
+        return callbackfn(data, index)
+    # end def callback()
+    return callback
+# def create_callable_from_callback(callbackfn, data, index)
+
+
 def create_label_from_strings(labels):
     '''
     Create a label function that merely indexes the list `labels`.
@@ -158,7 +179,7 @@ def create_label_from_strings(labels):
     '''
     def label_from_strings(data, index):
         return labels[index]
-    # end def
+    # end def label_from_strings(data, index)
     return label_from_strings
 # end def create_label_from_strings(labels)
 
