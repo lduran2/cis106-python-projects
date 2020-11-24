@@ -4,12 +4,15 @@ A program that demonstrates inheritance by managing a list of several
 employees.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-11-23t21:52
+When   : 2020-11-23t22:16
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.1
+Version: 1.2
 
 Changelog:
+    v1.2 - 2020-11-23t22:16
+        Implemented accessor and mutator methods.
+        Removed place holder subclass instances.
     v1.1 - 2020-11-23t21:52
         Implemented `make` actions.
         Moved all `make` actions to employee menu,
@@ -44,11 +47,6 @@ def main():
     # populate the list with employees
     for k in range(0, N_EMPLOYEES):
         employees[k] = employee.Employee()
-        # 1 - production worker, 2 - shift supervisor ; for testing
-        if (k == 1):
-            employees[1] = employee.ProductionWorker()
-        if (k == 2):
-            employees[2] = employee.ShiftSupervisor()
         employees[k].set_name('#' + str(k + 1))
     # end for k in range(0, N_EMPLOYEES)
 
@@ -158,10 +156,10 @@ def production_worker_menu(data, i_action):
     @return True to continue the employee menu
     '''
     options = ( 'S', 'P', 'G', 'N', 'E' )
-    labels = ( 'Display (S)hift number.', 'Display (P)ay rate.',\
+    labels = ( 'Display (S)hift.', 'Display (P)ay rate.',\
         'Calculate (G)ross pay.',\
         'Change shift (N)umber.', 'Change pay rat(E).' )
-    callbacks = ( display_prodn_worker_shift_number,\
+    callbacks = ( display_prodn_worker_shift,\
         display_prodn_worker_pay_rate,\
         calculate_prodn_worker_gross_pay,\
         change_prodn_worker_shift_number, change_prodn_worker_pay_rate
@@ -187,12 +185,10 @@ def shift_supervisor_menu(data, index):
     The menu for all shift supervisor.
     @return True to continue the employee menu
     '''
-    options = ( 'S', 'N', 'P', 'R', 'G', 'I', 'L' )
+    options = ( 'S', 'N', 'R', 'G' )
     labels = ( 'Display (S)alary.', 'Display bo(N)us.',\
-        'Display salary if (P)roduction goals are met.',\
         'Change sala(R)y.', 'Chan(G)e bonus.' )
     callbacks = ( display_shift_supvsr_salary, display_shift_supvsr_bonus,\
-        display_shift_supvsr_salary_plus_bonus,\
         change_shift_supvsr_salary, change_shift_supvsr_bonus
     )
     # count the options
@@ -242,6 +238,10 @@ def make_employee(data, i_action):
     employees[index] = employee.Employee()
     employees[index].set_name(old_employee.get_name())
     employees[index].set_employee_no(old_employee.get_employee_no())
+    # tell the user
+    print('Update:', get_employee_titled_name(employees, index), end='')
+    print(' is now an employee.')
+    print()
     return False
 # end def make_employee(data, i_action)
     
@@ -257,6 +257,10 @@ def make_production_worker(data, i_action):
     employees[index] = employee.ProductionWorker()
     employees[index].set_name(old_employee.get_name())
     employees[index].set_employee_no(old_employee.get_employee_no())
+    # tell the user
+    print('Update:', get_employee_titled_name(employees, index), end='')
+    print(' is now a production worker.')
+    print()
     return False
 # end def make_production_worker(data, i_action)
 
@@ -271,47 +275,258 @@ def make_shift_supervisor(data, i_action):
     employees[index] = employee.ShiftSupervisor()
     employees[index].set_name(old_employee.get_name())
     employees[index].set_employee_no(old_employee.get_employee_no())
+    # tell the user
+    print('Update:', get_employee_titled_name(employees, index), end='')
+    print(' is now a shift supervisor.')
+    print()
     return False
 # end def make_production_worker(data, i_action)
 
+# employee functions
+
 def display_employee_no(data, i_action):
-    pass
+    '''
+    Displays the employee number of the employee specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    print(get_employee_titled_name(employees, index), "'s", sep='', end='')
+    print(' employee number is ', end='')
+    print(employees[index].get_employee_no(), '.', sep='')
+    print()
+    return True
+# end def display_employee_no(data, i_action):
 
 def change_employee_name(data, i_action):
-    pass
+    '''
+    Changes the name of the employee specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    old_titled_name = get_employee_titled_name(employees, index)
+    print('What is ', old_titled_name, "'s", ' new name?', sep='')
+    name = input('> ')
+    employees[index].set_name(name)
+    # tell the user
+    print('Update:', old_titled_name, 'renamed to ', end='')
+    print(employees[index].get_name(), '.', sep='')
+    print()
+    return True
+# end def change_employee_name(data, i_action):
 
 def change_employee_no(data, i_action):
-    pass
+    '''
+    Changes the employee number of the employee specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+    print('What is ', titled_name, "'s", ' new employee number?', sep='')
+    employee_no = input('> ')
+    employees[index].set_employee_no(employee_no)
+    # tell the user
+    print('Update: ', end='')
+    return display_employee_no(data, i_action)
+# end def change_employee_no(data, i_action):
 
-def display_prodn_worker_shift_number(data, i_action):
-    pass
+# production worker functions
+
+def display_prodn_worker_shift(data, i_action):
+    '''
+    Displays the shift number of the production worker specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+    print(titled_name, "'s", ' shift is at ',  sep='', end='')
+    print(employees[index].get_shift(), 'time.')
+    print()
+    return True
+# end def display_prodn_worker_shift(data, i_action):
 
 def display_prodn_worker_pay_rate(data, i_action):
-    pass
+    '''
+    Displays the pay rate of the production worker specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+    print(titled_name, "'s", ' pay rate is $', sep='', end='')
+    print(employees[index].get_pay_rate(), '/hr.', sep='')
+    print()
+    return True
+# end def display_prodn_worker_pay_rate(data, i_action):
 
 def calculate_prodn_worker_gross_pay(data, i_action):
-    pass
+    '''
+    Calculates and displays the gross pay of the production worker
+    specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+    print('How many hours did', titled_name, 'work this week?')
+    hours = int(input('> '))
+    gross_pay = employees[index].calc_gross_pay(hours)
+    print(titled_name, ' earned $', gross_pay, ' this week.', sep='')
+    print()
+    return True
+# end def calculate_prodn_worker_gross_pay(data, i_action):
 
 def change_prodn_worker_shift_number(data, i_action):
-    pass
+    '''
+    Changes the shift number of the production worker specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+    print('What is ', titled_name, "'s", ' new shift?', sep='')
+    for k in employee.ProductionWorker.VALID_SHIFT_NOS:
+        print('\t(', k, ') ', employee.ProductionWorker.SHIFTS[k], sep='')
+    # end for k
+    try:
+        shift_no = int(input('> '))
+    except ValueError:
+        print('Error: The shift number must be an integer.')
+        return True
+    # end except ValueError
+
+    # stop on error
+    if (employees[index].set_shift_no(shift_no)):
+        print()
+        return True
+    # if (employees[index].set_shift_no(shift_no))
+    # otherwise, tell the user
+    print('Update: ', end='')
+    return display_prodn_worker_shift(data, i_action)
+# end def change_prodn_worker_shift_number(data, i_action):
 
 def change_prodn_worker_pay_rate(data, i_action):
-    pass
+    '''
+    Changes the pay rate of the production worker specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+    print('What is ', titled_name, "'s", ' new pay rate?', sep='')
+    pay_rate = input('> ')
+
+    # validate
+    try:
+        employees[index].set_pay_rate(pay_rate)
+    except ValueError:
+        print('Error: The pay rate must be a float.')
+        return True
+    # end except ValueError
+
+    # tell the user
+    print('Update: ', end='')
+    return display_prodn_worker_pay_rate(data, i_action)
+# end def change_prodn_worker_pay_rate(data, i_action):
+
+# shift supervisor functions
 
 def display_shift_supvsr_salary(data, i_action):
-    pass
+    '''
+    Calculates and displays the salary of the shift supervisor
+    specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+
+    salary = ''
+    print('Did ', titled_name, "'s", sep='', end='')
+    print(' shift meet production goals?[YN]')
+    choice = input('> ')
+    if (choice == 'Y'):
+        salary = employees[index].get_salary_plus_bonus()
+    elif (choice == 'N'):
+        salary = employees[index].get_salary()
+    else:
+        print('Error: Must choose Y or N.')
+        return True
+
+    print(titled_name, ' earned $', salary, ' this year.', sep='')
+    print()
+    return True
+# end def display_shift_supvsr_salary(data, i_action):
 
 def display_shift_supvsr_bonus(data, i_action):
-    pass
-
-def display_shift_supvsr_salary_plus_bonus(data, i_action):
-    pass
+    '''
+    Displays the annual production bonus of the shift supervisor
+    specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+    print(titled_name, 'may earn an annual production bonus of ', end='')
+    print(employees[index].get_bonus(), 'this year.')
+    print()
+    return True
+# end def display_shift_supvsr_bonus(data, i_action):
 
 def change_shift_supvsr_salary(data, i_action):
-    pass
+    '''
+    Changes the annual salary of the shift supervisor specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+    print('What is ', titled_name, "'s", ' new annual salary?', sep='')
+    salary = input('> ')
+
+    # validate
+    try:
+        employees[index].set_salary(salary)
+    except ValueError:
+        print('Error: The annual salary must be a float.')
+        return True
+    # end except ValueError
+
+    # tell the user
+    print('Update: ', end='')
+    print(titled_name, "'s", ' new annual salary is $', salary, '.', sep='')
+    print()
+    return True
+# end def change_shift_supvsr_salary(data, i_action):
 
 def change_shift_supvsr_bonus(data, i_action):
-    pass
+    '''
+    Changes the annual production bonus of the shift supervisor
+    specified by `data`.
+    @return True to continue in current menu
+    '''
+    employees = data['employees']
+    index = data['index']
+    titled_name = get_employee_titled_name(employees, index)
+    print('What is ', titled_name, "'s", sep='', end='')
+    print(' new annual production bonus?')
+    salary = input('> ')
+
+    # validate
+    try:
+        employees[index].set_bonus(salary)
+    except ValueError:
+        print('Error: The annual production bonus must be a float.')
+        return True
+    # end except ValueError
+
+    # tell the user
+    print('Update: ', end='')
+    return display_shift_supvsr_bonus(data, i_action)
+# end def change_prodn_worker_pay_rate(data, i_action):
 
 # start
 main()

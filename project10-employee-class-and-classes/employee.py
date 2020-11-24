@@ -7,12 +7,17 @@ Employee, ProductionWorker, ShiftSupervisor
 All classes follow the JavaBean model.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-11-22t11:48
+When   : 2020-11-22t23:14
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.0
+Version: 1.1
 
 Changelog:
+    v1.1 - 2020-11-22t23:14
+        Fixed `calc_gross_pay`, `get_salary_plus_bonus`, which were
+            returning the pay rate, the bonus, instead of expected.
+        Changes `this` to `self`.
+
     v1.0 - 2020-11-22t11:48
         Implemented ./employee.py
 '''
@@ -129,7 +134,7 @@ class ProductionWorker(Employee):
         # calculate the gross pay
         gross_pay = (self.__pay_rate * effective_hours)
         # format to 2 decimal places
-        return format(self.__pay_rate, '.2f')
+        return format(gross_pay, '.2f')
     # end def calc_gross_pay(self, hours)
 
     def set_shift_no(self, i):
@@ -201,7 +206,7 @@ class ShiftSupervisor(Employee):
         @return the annual salary of the shift supervisor if production goals are met.
         '''
         sum = self.__salary + self.__bonus  # the total salary
-        return format(self.__bonus, '.2f')
+        return format(sum, '.2f')
     # end def get_salary_plus_bonus(self)
 
     def set_salary(self, f):
@@ -209,7 +214,7 @@ class ShiftSupervisor(Employee):
         Sets the annual salary of the shift supervisor.
         @throws ValueError if `f` is not floatable
         '''
-        this.__salary = float(f)
+        self.__salary = float(f)
     # end def set_salary(self, f)
 
     def set_bonus(self, f):
@@ -217,6 +222,6 @@ class ShiftSupervisor(Employee):
         Sets the annual production bonus of the shift supervisor.
         @throws ValueError if `f` is not floatable
         '''
-        this.__bonus = float(f)
+        self.__bonus = float(f)
     # end def set_salary(self, f)
 # class ShiftSupervisor(Employee)
