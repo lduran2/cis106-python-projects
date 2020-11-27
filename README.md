@@ -48,3 +48,10 @@ information about the course using various functions of a dictionary,
 ## project9-pet-class
 A program that demonstrates classes and objects by instantiating and
 mutating an object, then accessing its properties.
+
+## project10-employee-class-and-classes
+A program that demonstrates inheritance by managing a list of several
+employees.
+
+## project11-recursive-printing
+A program that demonstrates recursion by printing the numbers [1, n].
