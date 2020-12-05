@@ -3,12 +3,15 @@
 A program that demonstrates recursion by printing the numbers [1, n].
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-11-27t10:32
+When   : 2020-11-27t15:09
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.1
+Version: 1.2
 
 Changelog:
+    v1.2 - 2020-11-27t15:09
+        Cleaned up recursive call and comments.
+
     v1.1 - 2020-11-27t10:32
         Added parameter for printing function.
 
@@ -46,9 +49,8 @@ def print_recursively(n, index = 1, func=print):
     # print the index
     func(index)
     # repeat, increasing the index
-    print_recursively(n, index = index + 1, func=func)
-# end def print_recursively(end, index = 1)
-
+    print_recursively(n, (index + 1), func)
+# end def print_recursively(end, index = 1, func=print)
 
 # start
 main()
