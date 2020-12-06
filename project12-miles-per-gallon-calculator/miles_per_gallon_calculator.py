@@ -4,14 +4,14 @@ An event-driven GUI program implementing a miles per gallon calculator
 with a 'Calculate MPG' button.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-12-05t22:49
+When   : 2020-12-06t04:11
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
 Version: 1.4
 
 Changelog:
-    v1.4 - 2020-12-05t22:49
-        Implemented input validation.
+    v1.4 - 2020-12-06t04:11
+        Changed to use labels for output.
 
     v1.3 - 2020-12-05t22:29
         Implemented `calcMPG` assuming good input.
@@ -42,18 +42,25 @@ class MilesPerGallonGUI:
         Creates the GUI.
         '''
 
-        # tuple of commands
+        # tuple of commands for the buttons
         COMMANDS = ( self.calcMPG, )
 
         # list of widgets in the main window
         widgets = []
         # list of sides to pack widgets to
         sides = []
+        # list of StringVar objects
+        string_vars = []
 
         # create the main window
         win_main = tk.Tk()
+        # provide width to the window
+        widgets.append(tk.Canvas(win_main,
+            width=self.__MAIN_WINDOW_WIDTH, height=0))
+        # pack to the top
+        sides.append('top')
 
-        # create the frames (stop at the labels)
+        # set up the frames (stop at the labels)
         for k in self.__RNG_FRAMES:
             # create the frame, and add it to widgets
             widgets.append(tk.Frame(win_main))
@@ -61,12 +68,13 @@ class MilesPerGallonGUI:
             sides.append('top')
         # end for k in self.__RNG_FRAMES
 
-        # create the labels
+        # set up the labels
         for k in self.__RNG_LABELS:
             # choose the correct label
             i_label = (k - self.__I_LABEL_START)
             # choose the correct frame
             i_frame = (i_label + self.__I_FRAME_START)
+
             # get the label string
             str_label = self.__STR_LABELS[i_label]
             # create the label
@@ -77,7 +85,12 @@ class MilesPerGallonGUI:
             sides.append('left')
         # end for k in self.__RNG_LABELS
 
-        # create the entries
+        # set up the message label
+        # create its StringVar
+        stv_message = tk.StringVar()
+        widgets[self.__I_LBL_MESSAGE]['textvariable'] = stv_message
+
+        # set up the entries
         for k in self.__RNG_ENTRIES:
             # choose the correct frame
             i_frame = (k - self.__I_ENTRY_START + self.__I_FRAME_START)
@@ -89,20 +102,44 @@ class MilesPerGallonGUI:
             sides.append('right')
         # end for k in self.__RNG_ENTRIES
 
+        # set up the output fields
+        for k in self.__RNG_FIELDS:
+            i_frame = (k
+                - self.__I_FIELD_START + self.__I_FIELD_FRAME_START)
+            # create the related StringVar
+            string_var = tk.StringVar()
+            # create the output field
+            field = tk.Label(widgets[i_frame],
+                textvariable=string_var,
+                borderwidth=widgets[self.__I_ENTRY_START]['borderwidth'],
+                relief=widgets[self.__I_ENTRY_START]['relief']
+            )
+            # add the StringVar to its list
+            string_vars.append(string_var)
+            # add the output field to widgets
+            widgets.append(field)
+            # left pack all output fields
+            sides.append('left')
+        # end for k in self.__RNG_FIELDS
+
         # add the get methods for gallons, miles to self
         self.__get_gallons  = widgets[self.__I_ENT_GALLONS].get
         self.__get_miles    = widgets[self.__I_ENT_MILES].get
+        # add the set methods for message, MPG to self
+        self.__set_message  = stv_message.set
+        self.__set_mpg      = string_vars[
+            self.__I_FLD_MPG - self.__I_FIELD_START].set
 
-        # create the buttons
+        # set up the buttons
         for k in self.__RNG_BUTTONS:
             # choose the correct command and button string
             i_command = (k - self.__I_BUTTON_START)
             # choose the correct frame
             i_frame = (i_command + self.__I_BUTTON_FRAME_START)
             # create the button
-            button = tk.Button(widgets[i_frame],\
-                text=self.__STR_BUTTONS[i_command],\
-                command=COMMANDS[i_command]\
+            button = tk.Button(widgets[i_frame],
+                text=self.__STR_BUTTONS[i_command],
+                command=COMMANDS[i_command]
             )
             # add the button to widgets
             widgets.append(button)
@@ -132,7 +169,11 @@ class MilesPerGallonGUI:
         try:
             gallons = float(self.__get_gallons())
         except ValueError: # handle not floatable
-            msg.showinfo('Response', 'The size of the gas tank must be a number.', icon='error')
+            #msg.showinfo('Response',
+            #    'The size of the gas tank must be a number.', icon='error'
+            #)
+            self.__set_message(
+                '️✖ The size of the gas tank must be a number.')
             return
         # end except ValueError
 
@@ -140,62 +181,89 @@ class MilesPerGallonGUI:
         try:
             miles = float(self.__get_miles())
         except ValueError: # handle not floatable
-            msg.showinfo('Response', 'The most one can drive must be a number.', icon='error')
+            #msg.showinfo('Response',
+            #    'The most one can drive must be a number.', icon='error'
+            #)
+            self.__set_message(
+                '✖️ The most one can drive must be a number.')
             return
         # end except ValueError
 
         # gallons must be positive,
         # but reject < 0.001 to avoid equality comparison of floats
         if (gallons < 0.001):
-            msg.showinfo('Response', 'The size of the gas tank must be positive.', icon='error')
+            #msg.showinfo('Response',
+            #    'The size of the gas tank must be positive.', icon='error'
+            #)
+            self.__set_message(
+                '✖ The size of the gas tank must be positive.')
             return
         # end if (gallons < 0.001)
 
         # miles must be nonnegative
-        if (miles < 0.0):
-            msg.showinfo('Response', 'The most one can drive must be nonnegative.', icon='error')
+        elif (miles < 0.0):
+            #msg.showinfo('Response',
+            #    'The most one can drive must be nonnegative.', icon='error'
+            #)
+            self.__set_message(
+                '✖ The most one can drive must be nonnegative.')
             return
         # end if (miles < 0.0)
 
+        # empty the message
+        self.__set_message('')
         # calculate the miles per gallon
         mpg = (miles / gallons)
         # set up the result message
-        message = ('Miles per gallon: ' + format(mpg, self.__MPG_FORMAT))
+        #message = ('Miles per gallon: ' + format(mpg, self.__MPG_FORMAT))
         # display the result message
-        msg.showinfo('Response', message)
+        self.__set_mpg(format(mpg, self.__MPG_FORMAT))
+        #msg.showinfo('Response', message)
     # end def calcMPG(self)
+
 
     ##################################################################
     # CONSTANTS
 
+    # width of the main window
+    __MAIN_WINDOW_WIDTH = 350
+
     # tuple of keys for widgets in the main window
-    ( \
-        __I_FRM_GALLONS, __I_FRM_MILES, __I_FRM_SUBMIT,\
-        __I_LBL_GALLONS, __I_LBL_MILES,\
-        __I_ENT_GALLONS, __I_ENT_MILES,\
-        __I_BTN_SUBMIT,\
-        __I_FINISH\
-    ) = tuple(range(0,9))
+    ( 
+        __I_CANVAS,
+        __I_FRM_GALLONS, __I_FRM_MILES, __I_FRM_MESSAGE, __I_FRM_MPG,
+            __I_FRM_SUBMIT,
+        __I_LBL_GALLONS, __I_LBL_MILES, __I_LBL_MESSAGE, __I_LBL_MPG,
+        __I_ENT_GALLONS, __I_ENT_MILES,
+                                                         __I_FLD_MPG,
+            __I_BTN_SUBMIT,
+        __I_FINISH
+    ) = tuple(range(0,15))
 
     # index of first of each class of widget
     __I_FRAME_START   = __I_FRM_GALLONS
     __I_LABEL_START   = __I_LBL_GALLONS
     __I_ENTRY_START   = __I_ENT_GALLONS
+    __I_FIELD_START   = __I_FLD_MPG
     __I_BUTTON_START  = __I_BTN_SUBMIT
+
+    # index of first of widget subclasses
+    __I_FIELD_FRAME_START   = __I_FRM_MPG
+    __I_BUTTON_FRAME_START  = __I_FRM_SUBMIT
 
     # range of each class of widget
     __RNG_FRAMES  = range(__I_FRAME_START,  __I_LABEL_START)
     __RNG_LABELS  = range(__I_LABEL_START,  __I_ENTRY_START)
-    __RNG_ENTRIES = range(__I_ENTRY_START,  __I_BUTTON_START)
+    __RNG_ENTRIES = range(__I_ENTRY_START,  __I_FIELD_START)
+    __RNG_FIELDS  = range(__I_FIELD_START,  __I_BUTTON_START)
     __RNG_BUTTONS = range(__I_BUTTON_START, __I_FINISH)
-
-    # index of first of widget subclasses
-    __I_BUTTON_FRAME_START = __I_FRM_SUBMIT
 
     # label strings used in GUI
     __STR_LABELS = (
-        'Size of gas tank [gal]:',\
-        'Most one can drive [mi]:',\
+        'Size of gas tank [gal]:',
+        'Most one can drive [mi]:',
+        '',
+        'Miles per gallon:'
     )
 
     # button strings used in GUI
