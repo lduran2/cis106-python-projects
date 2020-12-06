@@ -4,12 +4,15 @@ An event-driven GUI program implementing a miles per gallon calculator
 with a 'Calculate MPG' button.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-12-05t21:02
+When   : 2020-12-05t22:29
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.2
+Version: 1.3
 
 Changelog:
+    v1.3 - 2020-12-05t22:29
+        Implemented `calcMPG` assuming good input.
+
     v1.2 - 2020-12-05t21:02
         Made class constants private and moved to bottom of class.
 
@@ -23,7 +26,8 @@ Changelog:
 '''
 
 # libraries
-import tkinter as tk    # for GUI
+import tkinter as tk                # for GUI
+import tkinter.messagebox as msg    # for information dialog boxes
 
 class MilesPerGallonGUI:
     '''
@@ -82,6 +86,10 @@ class MilesPerGallonGUI:
             sides.append('right')
         # end for k in self.__RNG_ENTRIES
 
+        # add the get methods for gallons, miles to self
+        self.__get_gallons  = widgets[self.__I_ENT_GALLONS].get
+        self.__get_miles    = widgets[self.__I_ENT_MILES].get
+
         # create the buttons
         for k in self.__RNG_BUTTONS:
             # choose the correct command and button string
@@ -117,7 +125,15 @@ class MilesPerGallonGUI:
         '''
         Calculates the miles per gallon.
         '''
-        return
+        # get the gallons, miles
+        gallons = float(self.__get_gallons())
+        miles = float(self.__get_miles())
+        # calculate the miles per gallon
+        mpg = (miles / gallons)
+        # set up the message
+        message = ('Miles per gallon: ' + format(mpg, self.__MPG_FORMAT))
+        # display the message
+        msg.showinfo('Response', message)
     # end def calcMPG(self)
 
     ##################################################################
@@ -158,8 +174,11 @@ class MilesPerGallonGUI:
         'Calculate MPG!',
     )
 
-    # entry width
+    # number of characters in each entry widgets
     __ENTRY_WIDTH = 4
+
+    # result format
+    __MPG_FORMAT = '.1f'
 
 # end class MilesPerGallonGUI
 
