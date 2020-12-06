@@ -4,12 +4,15 @@ An event-driven GUI program implementing a miles per gallon calculator
 with a 'Calculate MPG' button.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-12-05t22:29
+When   : 2020-12-05t22:49
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.3
+Version: 1.4
 
 Changelog:
+    v1.4 - 2020-12-05t22:49
+        Implemented input validation.
+
     v1.3 - 2020-12-05t22:29
         Implemented `calcMPG` assuming good input.
 
@@ -125,14 +128,40 @@ class MilesPerGallonGUI:
         '''
         Calculates the miles per gallon.
         '''
-        # get the gallons, miles
-        gallons = float(self.__get_gallons())
-        miles = float(self.__get_miles())
+        # get the gallons
+        try:
+            gallons = float(self.__get_gallons())
+        except ValueError: # handle not floatable
+            msg.showinfo('Response', 'The size of the gas tank must be a number.', icon='error')
+            return
+        # end except ValueError
+
+        # get the miles
+        try:
+            miles = float(self.__get_miles())
+        except ValueError: # handle not floatable
+            msg.showinfo('Response', 'The most one can drive must be a number.', icon='error')
+            return
+        # end except ValueError
+
+        # gallons must be positive,
+        # but reject < 0.001 to avoid equality comparison of floats
+        if (gallons < 0.001):
+            msg.showinfo('Response', 'The size of the gas tank must be positive.', icon='error')
+            return
+        # end if (gallons < 0.001)
+
+        # miles must be nonnegative
+        if (miles < 0.0):
+            msg.showinfo('Response', 'The most one can drive must be nonnegative.', icon='error')
+            return
+        # end if (miles < 0.0)
+
         # calculate the miles per gallon
         mpg = (miles / gallons)
-        # set up the message
+        # set up the result message
         message = ('Miles per gallon: ' + format(mpg, self.__MPG_FORMAT))
-        # display the message
+        # display the result message
         msg.showinfo('Response', message)
     # end def calcMPG(self)
 
