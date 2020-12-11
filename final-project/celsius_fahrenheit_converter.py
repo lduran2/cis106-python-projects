@@ -4,17 +4,26 @@ A GUI program implementing a calculator that converts between Celsius
 and Fahrenheit.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-12-10t21:43
+When   : 2020-12-11t16:15
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.1
+Version: 1.2
 
 Changelog:
+    v1.2 - 2020-12-11t16:15
+        Added display message when converted and printing to console
+        when parsing because parsing is slow.
+
     v1.1 - 2020-12-10t21:43
         Implemented 'Convert to Celsius!'
 
     v1.0 - 2020-12-10t19:40
         Implemented 'Convert to Fahrenheit!'
+
+Works cited:
+    ^[1]: `printf-style` String Formatting. (2020).
+        Retrieved from Python
+        <https://docs.python.org/3/library/stdtypes.html#printf-style-string-formatting>
 '''
 
 # libraries
@@ -157,14 +166,14 @@ class CelsiusFahrenheitConverter:
             return
         #
 
-        # empty the message
-        self.__set_message('')
         # calculate the fahrenheit temperature
         C = temp_in
         F = (((9.0 * C)/5.0) + 32.0)
-        # display the result message
+        # display the result message^[1]
+        # https://docs.python.org/3/library/stdtypes.html#printf-style-string-formatting
         self.__set_temp_in(self.__FAHRENHEIT_FORMAT%(F))
-        #msg.showinfo('Response', message)
+        # notify the message
+        self.__set_message('Converted from Celsius to Fahrenheit.')        
     # end def convertToFahrenheit(self)
 
 
@@ -178,14 +187,13 @@ class CelsiusFahrenheitConverter:
             return
         #
 
-        # empty the message
-        self.__set_message('')
         # calculate the celsius temperature
         F = temp_in
         C = ((5.0*(F - 32.0))/9.0)
-        # display the result message
+        # display the result message^[1]
         self.__set_temp_in(self.__CELSIUS_FORMAT%(C))
-        #msg.showinfo('Response', message)
+        # notify the message
+        self.__set_message('Converted from Fahrenheit to Celsius.')        
     # end def convertToCelsius(self)
 
     def validateTemp(self):
@@ -195,6 +203,7 @@ class CelsiusFahrenheitConverter:
             the input temperature if valid
             `None` otherwise
         '''
+        print('Parsing temperature:', self.__get_temp_in(), '. . .')
         try:
             temp_in = float(self.__get_temp_in())
         except ValueError: # handle not floatable
