@@ -4,12 +4,15 @@ A GUI program implementing a calculator that converts between Celsius
 and Fahrenheit.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-12-10t19:40
+When   : 2020-12-10t21:43
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.0
+Version: 1.1
 
 Changelog:
+    v1.1 - 2020-12-10t21:43
+        Implemented 'Convert to Celsius!'
+
     v1.0 - 2020-12-10t19:40
         Implemented 'Convert to Fahrenheit!'
 '''
@@ -28,7 +31,7 @@ class CelsiusFahrenheitConverter:
         '''
 
         # tuple of commands for the buttons
-        COMMANDS = ( self.convertToFahrenheit, )
+        COMMANDS = ( self.convertToFahrenheit, self.convertToCelsius )
 
         # list of widgets in the main window
         widgets = []
@@ -107,9 +110,9 @@ class CelsiusFahrenheitConverter:
             sides.append('left')
         # end for k in self.__RNG_FIELDS
 
-        # add the get methods for gallons, miles to self
+        # add the get method for input temperature to self
         self.__get_temp_in  = widgets[self.__I_ENT_TEMP_IN].get
-        # add the set methods for message, MPG to self
+        # add the set methods for message, output temperature to self
         self.__set_message  = stv_message.set
         self.__set_temp_in      = string_vars[
             self.__I_FLD_TEMP_OUT - self.__I_FIELD_START].set
@@ -118,10 +121,8 @@ class CelsiusFahrenheitConverter:
         for k in self.__RNG_BUTTONS:
             # choose the correct command and button string
             i_command = (k - self.__I_BUTTON_START)
-            # choose the correct frame
-            i_frame = (i_command + self.__I_BUTTON_FRAME_START)
             # create the button
-            button = tk.Button(widgets[i_frame],
+            button = tk.Button(widgets[self.__I_BUTTON_FRAME_START],
                 text=self.__STR_BUTTONS[i_command],
                 command=COMMANDS[i_command]
             )
@@ -151,23 +152,58 @@ class CelsiusFahrenheitConverter:
         Converts the temperature to Fahrenheit.
         '''
         # get the input temperature
+        temp_in = self.validateTemp()
+        if (temp_in == None):
+            return
+        #
+
+        # empty the message
+        self.__set_message('')
+        # calculate the fahrenheit temperature
+        C = temp_in
+        F = (((9.0 * C)/5.0) + 32.0)
+        # display the result message
+        self.__set_temp_in(self.__FAHRENHEIT_FORMAT%(F))
+        #msg.showinfo('Response', message)
+    # end def convertToFahrenheit(self)
+
+
+    def convertToCelsius(self):
+        '''
+        Converts the temperature to Celsius.
+        '''
+        # get the input temperature
+        temp_in = self.validateTemp()
+        if (temp_in == None):
+            return
+        #
+
+        # empty the message
+        self.__set_message('')
+        # calculate the celsius temperature
+        F = temp_in
+        C = ((5.0*(F - 32.0))/9.0)
+        # display the result message
+        self.__set_temp_in(self.__CELSIUS_FORMAT%(C))
+        #msg.showinfo('Response', message)
+    # end def convertToCelsius(self)
+
+    def validateTemp(self):
+        '''
+        Validates the input temperature.
+        @returns
+            the input temperature if valid
+            `None` otherwise
+        '''
         try:
             temp_in = float(self.__get_temp_in())
         except ValueError: # handle not floatable
             self.__set_message(
                 '️✖ The input temperature must be a number.')
-            return
+            return None
         # end except ValueError
-
-        # empty the message
-        self.__set_message('')
-        # calculate the miles per gallon
-        C = temp_in
-        F = (((9.0 * C)/5.0) + 32.0)
-        # display the result message
-        self.__set_temp_in(format(F, self.__FAHRENHEIT_FORMAT))
-        #msg.showinfo('Response', message)
-    # end def calcMPG(self)
+        return temp_in
+    # end def validate_temp(self)
 
 
     ##################################################################
@@ -183,16 +219,16 @@ class CelsiusFahrenheitConverter:
         __I_LBL_TEMP_IN, __I_LBL_MESSAGE, __I_LBL_TEMP_OUT,
         __I_ENT_TEMP_IN, 
                                           __I_FLD_TEMP_OUT,
-            __I_BTN_SUBMIT,
+            __I_BTN_FAHRENHEIT, __I_BTN_CELSIUS,
         __I_FINISH
-    ) = tuple(range(0,12))
+    ) = tuple(range(0,13))
 
     # index of first of each class of widget
     __I_FRAME_START   = __I_FRM_TEMP_IN
     __I_LABEL_START   = __I_LBL_TEMP_IN
     __I_ENTRY_START   = __I_ENT_TEMP_IN
     __I_FIELD_START   = __I_FLD_TEMP_OUT
-    __I_BUTTON_START  = __I_BTN_SUBMIT
+    __I_BUTTON_START  = __I_BTN_FAHRENHEIT
 
     # index of first of widget subclasses
     __I_FIELD_FRAME_START   = __I_FRM_TEMP_OUT
@@ -207,23 +243,25 @@ class CelsiusFahrenheitConverter:
 
     # label strings used in GUI
     __STR_LABELS = (
-        'Input temperature [°C]:',
+        'Input temperature:',
         '',
-        'Output temperature [°F]:'
+        'Output temperature:'
     )
 
     # button strings used in GUI
     __STR_BUTTONS = (
         'Convert to Fahrenheit!',
+        'Convert to Celsius!'
     )
 
     # number of characters in each entry widgets
     __ENTRY_WIDTH = 6
 
-    # result format
-    __FAHRENHEIT_FORMAT = '.1f'
+    # result formats
+    __FAHRENHEIT_FORMAT = '%.1f °F'
+    __CELSIUS_FORMAT = '%.1f °C'
 
-# end class MilesPerGallonGUI
+# end class CelsiusFahrenheitConverter
 
 # create the gui and run the main window loop
 cf_conv_gui = CelsiusFahrenheitConverter()
