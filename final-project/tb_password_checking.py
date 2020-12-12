@@ -3,12 +3,15 @@
 Test bench for `./password_checking.py`
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-12-11t18:35
+When   : 2020-12-11t20:20
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.0
+Version: 1.1
 
 Changelog:
+    v1.1 - 2020-12-11t20:20
+        Added edge case ''.
+
     v1.0 - 2020-12-11t18:35
         Tested `./password_checking.py`.
 '''
@@ -16,8 +19,9 @@ Changelog:
 import password_checking as pwch
 
 def main():
-    passwords = ('abcdefg', 'abcdefgh', 'abcd1234', '1234!@#$', 'abcd!@#$',
-        'abc 123!@#', 'abc123!@#', '!abc123@#', '?abc123@#', 'abc123!!@#', '!! ')
+    passwords = ( 'abcdefg', 'abcdefgh', 'abcd1234', '1234!@#$', 'abcd!@#$',
+        'abc 123!@#', 'abc123!@#', '!abc123@#', '?abc123@#', 'abc123!!@#',
+        '!! ', '' )
     #
 
     # test each password

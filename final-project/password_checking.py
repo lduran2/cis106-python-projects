@@ -3,12 +3,16 @@
 An event-driven GUI program implementing password validator.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-12-11t18:34
+When   : 2020-12-11t20:24
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.0
+Version: 1.1
 
 Changelog:
+    v1.1 - 2020-12-11t20:24
+        Implemented repeating characters.
+        Refactored checks into a tuple.
+
     v1.0 - 2020-12-11t18:34
         Implemented length, character classes.
 
@@ -38,28 +42,30 @@ NUMERIC = tuple(range(ord('0'), (ord('9') + 1)))
 NONSTART = '!?'
 
 # number of errors checked for
-N_ERRORS = 6
+N_ERRORS = 7
 
 def validate_password(s):
     '''
     Validates the password given by `s`.
     '''
+    # list of errors
     errors = []
 
-    # check the length.
-    if (len(s) < MIN_LENGTH):
-        errors.append('✖ The password must be at least ' + str(MIN_LENGTH) +
-            ' characters long.')
-    # end if (len(s) < 8)
+    # get the length
+    length = len(s)
 
     # flags for the character classes
     has_alpha = False
     has_numeric = False
     has_nonalphanumeric = False
     has_space = False
+    has_repeating = False   # special: whether any character repeat
 
     # populate the character class flags
+    prev_c = '' # the previous character
     for c in s: # for each character in the string s
+        # We make sure to check whether `ord(c)` is in the character
+        # classes by comparing their integer values.
         if (ord(c) in ALPHA):
             has_alpha = True
         elif (ord(c) in NUMERIC):
@@ -70,34 +76,45 @@ def validate_password(s):
             has_nonalphanumeric = True
         # end if (c in ALPHA) elif (c in NUMERIC)
         #     elif (str.isspace(c)) else
+
+        # check if same as previous character
+        if (c == prev_c):
+            has_repeating = True
+        # end if (c == prev_c)
+        prev_c = c  # update prev_c
     # end for c in s
 
-    # check each flag
-
-    if (not(has_alpha)):
-        errors.append('✖ The password must contain at least one alpha' +
-            ' character.')
-    # end if (not(has_alpha))
-
-    if (not(has_numeric)):
-        errors.append('✖ The password must contain at least one numeric' +
-            ' character.')
-    # end if (not(has_numeric))
-
-    if (not(has_nonalphanumeric)):
-        errors.append('✖ The password must contain at least one character' +
-            ' that is not alpha or numeric.')
-    # end if (not(has_nonalphanumeric))
-
-    if (has_space):
-        errors.append('✖ The password must not contain spaces.')
-    # end if (has_space)
-
-    # check the first character
-    if (s[0] in NONSTART):
-        errors.append('✖ The password must not begin with any of "' +
-            NONSTART + '".')
-    # end if (s[0] in NONSTART)
+    # place all checks in a tuple
+    checks = (
+        # the length
+        { 'test': (length < MIN_LENGTH), 'message':
+            '✖ must be at least ' + str(MIN_LENGTH) + ' characters long.'},
+        # the flags
+        { 'test': not(has_alpha), 'message':
+            '✖ must contain at least one alpha character.' },
+        { 'test': not(has_numeric), 'message':
+            '✖ must contain at least one numeric character.'},
+        { 'test': not(has_nonalphanumeric), 'message':
+            '✖ must contain at least one character that is not alpha' +
+            ' or numeric.'
+        },
+        { 'test': has_space, 'message':
+            '✖ must not contain spaces.'},
+        # the first character, but make sure there is a first character
+        { 'test': ((length != 0) and (s[0] in NONSTART)), 'message':
+            '✖ must not begin with any of "' + NONSTART + '".' },
+        # any repeating characters
+        { 'test': (has_repeating), 'message':
+            '✖ cannot contain repeating character strings of 2 or more' +
+            ' identical characters.'
+        }
+    )
+    # perform all checks
+    for check in checks:
+        if (check['test']):
+            errors.append(check['message'])
+        # end if (check[test])
+    # for check in checks
 
     # return the list of errors
     return tuple(errors)
