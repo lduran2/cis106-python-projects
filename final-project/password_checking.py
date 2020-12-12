@@ -1,14 +1,17 @@
 '''
 ./final-project/password_checking.py
-An event-driven GUI program implementing password validator.
+A password validator method.
 
 By     : Leomar Duran <https://github.com/lduran2>
 When   : 2020-12-11t20:24
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.1
+Version: 1.2
 
 Changelog:
+    v1.2 - 2020-12-11t21:04
+        Modularized `validate_password`.
+
     v1.1 - 2020-12-11t20:24
         Implemented repeating characters.
         Refactored checks into a tuple.
@@ -47,12 +50,30 @@ N_ERRORS = 7
 def validate_password(s):
     '''
     Validates the password given by `s`.
+    @returns a list of all errors found in password `s`.
     '''
     # list of errors
     errors = []
 
-    # get the length
-    length = len(s)
+    (has_alpha, has_numeric, has_nonalphanumeric,
+        has_space, has_repeating) = check_password_characters(s)
+
+    # place all checks in a tuple
+    checks = check_tuple(s, has_alpha, has_numeric, has_nonalphanumeric,
+        has_space, has_repeating)
+
+    # reduce the checks into the list of errors
+    reduce_checks_to_errors(checks, errors)
+
+    # return the list of errors
+    return tuple(errors)
+# end def validate_password(s)
+
+def check_password_characters(s):
+    '''
+    Performs the character checks.
+    @returns each character class flag.
+    '''
 
     # flags for the character classes
     has_alpha = False
@@ -84,8 +105,20 @@ def validate_password(s):
         prev_c = c  # update prev_c
     # end for c in s
 
-    # place all checks in a tuple
-    checks = (
+    return (has_alpha, has_numeric, has_nonalphanumeric,
+        has_space, has_repeating)
+# end def check_password_characters(s)
+
+def check_tuple(s, has_alpha, has_numeric, has_nonalphanumeric,
+        has_space, has_repeating):
+    '''
+    Create a tuple containing each check.
+    '''
+
+    # get the length
+    length = len(s)
+
+    return (
         # the length
         { 'test': (length < MIN_LENGTH), 'message':
             '✖ must be at least ' + str(MIN_LENGTH) + ' characters long.'},
@@ -109,13 +142,19 @@ def validate_password(s):
             ' identical characters.'
         }
     )
-    # perform all checks
+# end def check_tuple(has_alpha, has_numeric, has_nonalphanumeric,
+#       has_space, has_repeating)
+
+def reduce_checks_to_errors(checks, errors):
+    '''
+    Evaluates each check and if true, adds it to the error list.
+    @params
+        checks -- tuple of checks with the test and related error message
+        errors -- the error messages that apply
+    '''
     for check in checks:
         if (check['test']):
             errors.append(check['message'])
         # end if (check[test])
-    # for check in checks
-
-    # return the list of errors
-    return tuple(errors)
-# end def validate_password(s)
+    # end for check in checks
+# end def reduce_checks_to_errors(checks, errors)
