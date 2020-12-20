@@ -3,14 +3,16 @@
 Classes and methods for handling credit cards.
 
 By     : Leomar Duran <https://github.com/lduran2>
-When   : 2020-12-20t0208
+When   : 2020-12-20t0235
 Where  : Community College of Philadelphia
 For    : CIS 106/Introduction to Programming
-Version: 1.1
+Version: 1.2
 
 Changelog:
+    v1.2 - 2020-12-20t0235
+        Parsed level 3 of credit card configuration.
     v1.1 - 2020-12-20t0208
-        Parsed second level of credit card configuration.
+        Parsed level 2 of credit card configuration.
     v1.0 - 2020-12-20t0148
         Parsed top level of credit card configuration.
 '''
@@ -33,21 +35,36 @@ def license(filename='credit-card-config'):
         min = int(lines[0])
         max = int(lines[1])
 
+        # keys and parsing functions for issuer attributes
+        keys = ('name', 'len')
+        funcs = (str, int)
+
         # for each of the remaining lines
         for line in lines[2:]:
-            # if the line is first level,
+            # if the line is level 1,
             if (not(line.startswith('\t'))):
                 # then it is the name of a major industry identifier
                 # update the current industry, and append it to the list
-                industry = { 'name' : line.strip(), 'companies' : [] }
+                industry = { 'name' : line.strip(), 'issuers' : [] }
                 industries.append(industry)
             # end if (not(line.startswith('\t')))
-            # if the line is second level,
+            # if the line is level 2,
             elif (not(line.startswith('\t' * 2))):
-                # then it is a company
-                # append to current industry's companies list
-                industry['companies'].append(line.strip())
+                # then it is an issuer
+                # append to current industry's issuers list
+                issuer = {}
+                industry['issuers'].append({ line.strip() : issuer })
+                # reset the key count
+                i_keys = 0
             # end elif (not(line.startswith('\t' * 2)))
+            # if the line is level 3
+            elif (not(line.startswith('\t' * 3))):
+                # then it is an issuer attribute
+                # put it into the issuer
+                issuer[keys[i_keys]] = funcs[i_keys](line.strip())
+                # next key
+                i_keys += 1
+            # elif (not(line.startswith('\t' * 3)))
         # end for line in lines[2:]
 
         # print the result and its length
